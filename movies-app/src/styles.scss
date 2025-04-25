@@ -1,0 +1,75 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Global Styles */
+:root {
+  --primary-color: #9c27b0;
+  --primary-dark: #7b1fa2;
+  --primary-light: #ba68c8;
+  --text-color: #ffffff;
+  --text-color-secondary: #bdbdbd;
+  --surface-ground: #121212;
+  --surface-section: #1e1e1e;
+  --surface-card: #262626;
+  --surface-overlay: #2a2a2a;
+  --surface-border: #383838;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--surface-ground);
+  color: var(--text-color);
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-ground);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+/* Utility Classes */
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-secondary {
+  color: var(--text-color-secondary);
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-surface {
+  background-color: var(--surface-section);
+}
+
+/* Card Overrides */
+.p-card {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Button Overrides */
+.p-button {
+  border-radius: 4px;
+}
