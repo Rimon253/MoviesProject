@@ -5,7 +5,7 @@ import { MovieDetailsComponent } from './features/movies/components/movie-detail
 export const routes: Routes = [
   {
     path: '',
-    component: MovieListComponent
+    loadComponent: () => import('./features/movies/components/movie-list/movie-list.component').then(m => m.MovieListComponent)
   },
   {
     path: 'favorites',

@@ -40,16 +40,26 @@ export class MovieService {
 
   getMovieDetails(id: number): Observable<MovieDetails> {
     return this.http
-      .get<MovieDto & { runtime: number; tagline: string; production_companies: Array<{ name: string }> }>(
-        `${this.baseUrl}/movie/${id}`,
-        {
-          params: {
-            api_key: this.apiKey,
-            language: environment.defaultLanguage,
-            append_to_response: 'credits'
-          }
+      .get<MovieDto & { 
+        runtime: number; 
+        tagline: string; 
+        production_companies: Array<{ name: string }>;
+        credits: {
+          cast: Array<{
+            id: number;
+            name: string;
+            character: string;
+            profile_path: string | null;
+            order: number;
+          }>;
+        };
+      }>(`${this.baseUrl}/movie/${id}`, {
+        params: {
+          api_key: this.apiKey,
+          language: environment.defaultLanguage,
+          append_to_response: 'credits'
         }
-      )
+      })
       .pipe(
         map(movie => ({
           ...this.mapMovieDto(movie),
@@ -57,8 +67,15 @@ export class MovieService {
           tagline: movie.tagline,
           language: movie.original_title,
           productionCompanies: movie.production_companies.map(pc => pc.name),
-          cast: [], // Will be populated from credits
-          director: '' // Will be populated from credits
+          credits: {
+            cast: movie.credits.cast.map(cast => ({
+              id: cast.id,
+              name: cast.name,
+              character: cast.character,
+              profilePath: cast.profile_path,
+              order: cast.order
+            }))
+          }
         }))
       );
   }

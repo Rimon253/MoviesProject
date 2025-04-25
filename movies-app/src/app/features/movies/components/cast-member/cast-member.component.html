@@ -1,0 +1,18 @@
+<div class="cast-card">
+  <div class="cast-image">
+    @if (member.profilePath) {
+      <img 
+        [src]="getProfileUrl(member.profilePath)" 
+        [alt]="member.name" 
+        loading="lazy" />
+    } @else {
+      <div class="no-image">
+        <i class="pi pi-user"></i>
+      </div>
+    }
+  </div>
+  <div class="cast-info">
+    <h3>{{ member.name }}</h3>
+    <p>{{ member.character }}</p>
+  </div>
+</div> 

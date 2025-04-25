@@ -33,24 +33,25 @@ export interface Movie {
   id: number;
   title: string;
   overview: string;
-  year: string;
-  genres: string[];
-  rating: number;
   posterUrl: string;
   backdropUrl: string;
+  rating: number;
+  year: string;
+  genres: string[];
 }
 
 export interface CastMember {
+  id: number;
   name: string;
   character: string;
-  profileUrl: string | null;
+  profilePath: string | null;
+  order: number;
+}
+
+export interface MovieCredits {
+  cast: CastMember[];
 }
 
 export interface MovieDetails extends Movie {
-  runtime: number;
-  tagline: string;
-  language: string;
-  productionCompanies: string[];
-  cast: CastMember[];
-  director: string;
+  credits: MovieCredits;
 } 

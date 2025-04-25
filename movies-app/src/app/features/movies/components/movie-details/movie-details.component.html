@@ -1,3 +1,11 @@
+<!-- Back Button -->
+<button pButton 
+  icon="pi pi-arrow-left" 
+  label="Back to Movies"
+  class="back-button p-button-text"
+  (click)="goBack()">
+</button>
+
 <div class="movie-details" *ngIf="movie">
   <!-- Hero Section -->
   <div class="hero" [style.backgroundImage]="'url(' + movie.backdropUrl + ')'">
@@ -44,25 +52,11 @@
 
   <!-- Cast Section -->
   <div class="content">
-    <section class="cast" *ngIf="movie.cast?.length">
-      <h2>Cast</h2>
+    <section class="cast" *ngIf="movie.credits.cast?.length">
+      <h2>Top Cast</h2>
       <div class="cast-grid">
-        @for (member of movie.cast.slice(0, 8); track member.name) {
-          <div class="cast-card">
-            <div class="cast-image">
-              @if (member.profileUrl) {
-                <img [src]="member.profileUrl" [alt]="member.name" />
-              } @else {
-                <div class="no-image">
-                  <i class="pi pi-user"></i>
-                </div>
-              }
-            </div>
-            <div class="cast-info">
-              <h3>{{ member.name }}</h3>
-              <p>{{ member.character }}</p>
-            </div>
-          </div>
+        @for (member of movie.credits.cast; track member.id) {
+          <app-cast-member [member]="member" />
         }
       </div>
     </section>
