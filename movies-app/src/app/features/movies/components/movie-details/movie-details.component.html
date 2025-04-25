@@ -1,0 +1,70 @@
+<div class="movie-details" *ngIf="movie">
+  <!-- Hero Section -->
+  <div class="hero" [style.backgroundImage]="'url(' + movie.backdropUrl + ')'">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="poster">
+        <img [src]="movie.posterUrl" [alt]="movie.title" />
+      </div>
+      <div class="info">
+        <h1>{{ movie.title }}</h1>
+        <div class="meta">
+          <span class="year">{{ movie.year }}</span>
+          <span class="separator">•</span>
+          <span class="rating">
+            <i class="pi pi-star-fill"></i>
+            {{ movie.rating | number:'1.1-1' }}
+          </span>
+          <span class="separator">•</span>
+          <span class="genres">{{ movie.genres.join(', ') }}</span>
+        </div>
+        <p class="overview">{{ movie.overview }}</p>
+        <div class="actions">
+          <button pButton 
+            label="Watch Trailer" 
+            icon="pi pi-play" 
+            class="p-button-rounded">
+          </button>
+          <button pButton 
+            [icon]="isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
+            class="p-button-rounded"
+            [class.p-button-danger]="isFavorite"
+            (click)="toggleFavorite()">
+          </button>
+          <button pButton 
+            [icon]="isWishlist ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"
+            class="p-button-rounded"
+            [class.p-button-info]="isWishlist"
+            (click)="toggleWishlist()">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cast Section -->
+  <div class="content">
+    <section class="cast" *ngIf="movie.cast?.length">
+      <h2>Cast</h2>
+      <div class="cast-grid">
+        @for (member of movie.cast.slice(0, 8); track member.name) {
+          <div class="cast-card">
+            <div class="cast-image">
+              @if (member.profileUrl) {
+                <img [src]="member.profileUrl" [alt]="member.name" />
+              } @else {
+                <div class="no-image">
+                  <i class="pi pi-user"></i>
+                </div>
+              }
+            </div>
+            <div class="cast-info">
+              <h3>{{ member.name }}</h3>
+              <p>{{ member.character }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+</div> 

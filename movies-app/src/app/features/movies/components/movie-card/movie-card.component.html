@@ -1,0 +1,26 @@
+<div class="movie-card" (click)="onShowDetails()">
+  <div class="poster-container">
+    <img [src]="movie.posterUrl" [alt]="movie.title" class="movie-poster" />
+    <div class="rating">
+      <span class="rating-value">{{ movie.rating | number:'1.1-1' }}</span>
+    </div>
+    <div class="actions">
+      <button pButton 
+        class="p-button-rounded p-button-text" 
+        [class.favorite]="isFavorite"
+        icon="pi pi-heart" 
+        (click)="onToggleFavorite($event)">
+      </button>
+      <button pButton 
+        class="p-button-rounded p-button-text" 
+        [class.wishlist]="isWishlist"
+        icon="pi pi-bookmark" 
+        (click)="onToggleWishlist($event)">
+      </button>
+    </div>
+  </div>
+  <div class="movie-info">
+    <h3 class="movie-title">{{ movie.title }}</h3>
+    <p class="release-date">{{ movie.year }}</p>
+  </div>
+</div> 

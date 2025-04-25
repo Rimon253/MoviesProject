@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { MovieListComponent } from './features/movies/movie-list/movie-list.component';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
+import { MovieListComponent } from './features/movies/components/movie-list/movie-list.component';
 
 @Component({
   selector: 'app-root',

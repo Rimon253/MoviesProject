@@ -1,58 +1,18 @@
 import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MovieCardComponent } from './components/movie-card.component';
-import { MovieSearchComponent } from './components/movie-search.component';
-import { MovieService } from '../../../core/services/movie.service';
-import { MoviesStore } from '../../../core/state/movies.state';
-import { Movie } from '../../../shared/models/movie.interface';
+import { MovieCardComponent } from '../movie-card/movie-card.component';
+import { MovieSearchComponent } from '../movie-search/movie-search.component';
+import { MovieService } from '../../../../core/services/movie.service';
+import { MoviesStore } from '../../../../core/state/movies.state';
+import { Movie } from '../../../../shared/models/movie.interface';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
   imports: [CommonModule, MovieCardComponent, MovieSearchComponent],
-  template: `
-    <div class="movie-list">
-      <app-movie-search />
-
-      <div class="movie-list__grid">
-        @for (movie of movies(); track movie.id) {
-          <app-movie-card
-            [movie]="movie"
-            [isFavorite]="isFavorite(movie)"
-            [isWishlist]="isWishlist(movie)"
-            (toggleFavorite)="onToggleFavorite($event)"
-            (toggleWishlist)="onToggleWishlist($event)"
-            (showDetails)="onShowDetails($event)"
-          />
-        }
-      </div>
-
-      @if (loading()) {
-        <div class="movie-list__loading">
-          <p>Loading movies...</p>
-        </div>
-      }
-    </div>
-  `,
-  styles: [`
-    .movie-list {
-      padding: 1rem;
-
-      &__grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1rem;
-        justify-items: center;
-      }
-
-      &__loading {
-        text-align: center;
-        padding: 2rem;
-        color: var(--text-color-secondary);
-      }
-    }
-  `]
+  templateUrl: './movie-list.component.html',
+  styleUrls: ['./movie-list.component.scss']
 })
 export class MovieListComponent implements OnInit {
   private movieService = inject(MovieService);
@@ -78,7 +38,6 @@ export class MovieListComponent implements OnInit {
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-    // Load more when user scrolls to bottom (with 200px threshold)
     if (windowHeight + scrollTop >= documentHeight - 200) {
       this.loadMovies();
     }

@@ -1,0 +1,172 @@
+.movie-search {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  &__poster {
+    width: 40px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__title {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+
+  &__year {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+  }
+}
+
+:host ::ng-deep {
+  .p-autocomplete {
+    width: 100%;
+
+    .p-autocomplete-input {
+      background-color: var(--surface-card);
+      border-color: var(--surface-border);
+      color: var(--text-color);
+
+      &:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 1px var(--primary-color);
+      }
+    }
+
+    .p-autocomplete-panel {
+      background-color: var(--surface-overlay);
+      border: 1px solid var(--surface-border);
+    }
+
+    .p-autocomplete-items {
+      .p-autocomplete-item {
+        color: var(--text-color);
+        padding: 0.5rem;
+
+        &:hover {
+          background-color: var(--surface-hover);
+        }
+      }
+    }
+  }
+}
+
+.search-container {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+
+  :host ::ng-deep {
+    .p-autocomplete {
+      width: 100%;
+
+      .p-autocomplete-input {
+        height: 3.5rem;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+        background: var(--surface-card);
+        border: 1px solid var(--surface-border);
+        border-radius: 12px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: var(--primary-color);
+        }
+
+        &:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 2px var(--primary-color-alpha-20);
+        }
+      }
+
+      .p-autocomplete-panel {
+        background: var(--surface-overlay);
+        border: none;
+        border-radius: 12px;
+        margin-top: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(10px);
+      }
+
+      .p-autocomplete-items {
+        padding: 0.5rem;
+      }
+
+      .p-autocomplete-item {
+        border-radius: 8px;
+        padding: 0;
+        margin-bottom: 4px;
+
+        &:hover {
+          background: var(--surface-hover);
+        }
+
+        &.p-highlight {
+          background: var(--primary-color-alpha-10);
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  gap: 12px;
+
+  &-poster {
+    width: 45px;
+    height: 68px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  &-info {
+    flex: 1;
+  }
+
+  &-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-color);
+  }
+
+  &-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+
+    .year {
+      color: var(--text-color-secondary);
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .pi-star-fill {
+        color: #ffd700;
+        font-size: 0.8rem;
+      }
+    }
+  }
+} 

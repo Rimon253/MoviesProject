@@ -1,0 +1,27 @@
+<!-- Movie List Container -->
+<div class="movie-list-container">
+  <!-- Search Component -->
+  <app-movie-search></app-movie-search>
+
+  <!-- Movies Grid -->
+  <div class="movies-grid">
+    @for (movie of movies(); track movie.id) {
+      <app-movie-card 
+        [movie]="movie"
+        [isFavorite]="isFavorite(movie)"
+        [isWishlist]="isWishlist(movie)"
+        (toggleFavorite)="onToggleFavorite(movie)"
+        (toggleWishlist)="onToggleWishlist(movie)"
+        (showDetails)="onShowDetails(movie)">
+      </app-movie-card>
+    }
+  </div>
+
+  <!-- Loading Spinner -->
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading movies...</p>
+    </div>
+  }
+</div> 
