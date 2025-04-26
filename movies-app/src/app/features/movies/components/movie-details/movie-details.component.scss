@@ -5,13 +5,12 @@
 
 .back-button {
   position: fixed;
-  top: 4rem;
-  right: 2rem;
+  top: 1rem;
+  left: 1rem;
   z-index: 10;
   font-size: 1.1rem;
   padding: 0.5rem 1rem;
   background: rgba(0, 0, 0, 0.5);
-  border-radius: 1rem;
   border: none;
   color: white;
   
@@ -128,76 +127,33 @@
     color: var(--text-color);
   }
 
-  &-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1.5rem;
-  }
-
-  &-card {
-    background: var(--surface-card);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-  }
-
-  &-image {
-    aspect-ratio: 2/3;
-    overflow: hidden;
-    background: var(--surface-hover);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-
-      &:hover {
-        transform: scale(1.05);
+  ::ng-deep {
+    .p-carousel {
+      .p-carousel-content {
+        padding: 0;
       }
-    }
 
-    .no-image {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--surface-hover);
-      color: var(--text-color-secondary);
+      .p-carousel-prev,
+      .p-carousel-next {
+        width: 3rem;
+        height: 3rem;
+        color: var(--text-color);
+        background: var(--surface-card);
+        border-radius: 50%;
+        margin: 0 -1.5rem;
+        
+        &:hover {
+          background: var(--surface-hover);
+        }
 
-      .pi {
-        font-size: 2rem;
+        &.p-disabled {
+          display: none;
+        }
       }
-    }
-  }
 
-  &-info {
-    padding: 1rem;
-
-    h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-color);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--text-color-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      .carousel-item {
+        padding: 0.5rem;
+      }
     }
   }
 }
@@ -243,8 +199,16 @@
     }
   }
 
-  .cast-grid {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 1rem;
+  .cast {
+    ::ng-deep {
+      .p-carousel {
+        .p-carousel-prev,
+        .p-carousel-next {
+          width: 2.5rem;
+          height: 2.5rem;
+          margin: 0 -1.25rem;
+        }
+      }
+    }
   }
 } 

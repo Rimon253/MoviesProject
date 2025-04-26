@@ -25,9 +25,9 @@ export class MovieListComponent implements OnInit {
   isLoadingMore = false;
 
   ngOnInit(): void {
-    if (this.movies().length === 0) {
+    // if (this.movies().length === 0) {
       this.loadMovies();
-    }
+    // }
   }
 
   @HostListener('window:scroll', ['$event'])

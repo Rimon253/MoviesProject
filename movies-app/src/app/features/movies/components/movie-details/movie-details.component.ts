@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
+import { CarouselModule } from 'primeng/carousel';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MovieService } from '../../../../core/services/movie.service';
@@ -14,7 +15,7 @@ import { CastMemberComponent } from '../cast-member/cast-member.component';
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, ButtonModule, ChipModule, CastMemberComponent]
+  imports: [CommonModule, ButtonModule, ChipModule, CarouselModule, CastMemberComponent]
 })
 export class MovieDetailsComponent implements OnInit {
   private movieService = inject(MovieService);
@@ -25,6 +26,33 @@ export class MovieDetailsComponent implements OnInit {
   movie: MovieDetails | null = null;
   isFavorite = false;
   isWishlist = false;
+  responsiveOptions = [
+    {
+      breakpoint: '1400px',
+      numVisible: 6,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1200px',
+      numVisible: 5,
+      numScroll: 1
+    },
+    {
+      breakpoint: '992px',
+      numVisible: 4,
+      numScroll: 1
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '576px',
+      numVisible: 2,
+      numScroll: 1
+    }
+  ];
 
   ngOnInit(): void {
     const movieId = this.route.snapshot.paramMap.get('id');

@@ -54,11 +54,19 @@
   <div class="content">
     <section class="cast" *ngIf="movie.credits.cast?.length">
       <h2>Top Cast</h2>
-      <div class="cast-grid">
-        @for (member of movie.credits.cast; track member.id) {
-          <app-cast-member [member]="member" />
-        }
-      </div>
+      <p-carousel 
+        [value]="movie.credits.cast" 
+        [numVisible]="6"
+        [numScroll]="1"
+        [circular]="false"
+        [responsiveOptions]="responsiveOptions"
+        [showIndicators]="false">
+        <ng-template let-member pTemplate="item">
+          <div class="carousel-item">
+            <app-cast-member [member]="member" />
+          </div>
+        </ng-template>
+      </p-carousel>
     </section>
   </div>
 </div> 

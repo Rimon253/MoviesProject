@@ -7,7 +7,10 @@ import { CastMember } from '../../../../shared/models/movie.interface';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './cast-member.component.html',
-  styleUrls: ['./cast-member.component.scss']
+  styleUrls: ['./cast-member.component.scss'],
+  host: {
+    class: 'pi'
+  }
 })
 export class CastMemberComponent {
   @Input({ required: true }) member!: CastMember;
