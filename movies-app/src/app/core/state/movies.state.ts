@@ -9,6 +9,7 @@ export interface MoviesState {
   selectedMovie: MovieDetails | null;
   loading: boolean;
   error: string | null;
+  currentPage: number;
 }
 
 const initialState: MoviesState = {
@@ -18,7 +19,8 @@ const initialState: MoviesState = {
   recentlyViewed: [],
   selectedMovie: null,
   loading: false,
-  error: null
+  error: null,
+  currentPage: 1
 };
 
 @Injectable({
@@ -35,10 +37,15 @@ export class MoviesStore {
   selectedMovie = computed(() => this.state().selectedMovie);
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
+  currentPage = computed(() => this.state().currentPage);
 
   // Actions
   setMovies(movies: Movie[]): void {
     this.updateState({ movies });
+  }
+
+  setCurrentPage(currentPage: number): void {
+    this.updateState({ currentPage });
   }
 
   setSelectedMovie(movie: MovieDetails | null): void {

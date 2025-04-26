@@ -66,34 +66,10 @@
         </div>
 
         <div class="details-grid">
-          <div class="detail-item">
-            <label>Status</label>
-            <span>{{ movie.status }}</span>
-          </div>
-          <div class="detail-item">
-            <label>Director</label>
-            <span>{{ movie.credits.director }}</span>
-          </div>
-          <div class="detail-item">
-            <label>Language</label>
-            <span>{{ movie.language }}</span>
-          </div>
-          <div class="detail-item">
-            <label>Release Date</label>
-            <span>{{ movie.releaseDate | date }}</span>
-          </div>
-          <div class="detail-item">
-            <label>Budget</label>
-            <span>{{ movie.budget | currency }}</span>
-          </div>
-          <div class="detail-item">
-            <label>Revenue</label>
-            <span>{{ movie.revenue | currency }}</span>
-          </div>
-          @if (movie.productionCompanies.length) {
+          @for (detail of movieDetails; track detail.label) {
             <div class="detail-item">
-              <label>Production</label>
-              <span>{{ movie.productionCompanies.join(', ') }}</span>
+              <label>{{ detail.label }}</label>
+              <span>{{ detail.value }}</span>
             </div>
           }
         </div>

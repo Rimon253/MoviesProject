@@ -21,13 +21,13 @@ export class MovieListComponent implements OnInit {
 
   movies = this.store.movies;
   loading = this.store.loading;
-  currentPage = 1;
   isLoadingMore = false;
 
   ngOnInit(): void {
-    // if (this.movies().length === 0) {
+    if (this.movies().length === 0) {
+      this.store.setCurrentPage(1);
       this.loadMovies();
-    // }
+    }
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -47,11 +47,13 @@ export class MovieListComponent implements OnInit {
     this.isLoadingMore = true;
     this.store.setLoading(true);
     
-    this.movieService.getPopularMovies(this.currentPage).subscribe({
+    const currentPage = this.store.currentPage();
+    
+    this.movieService.getPopularMovies(currentPage).subscribe({
       next: (movies) => {
         this.store.setMovies([...this.movies(), ...movies]);
         this.store.setLoading(false);
-        this.currentPage++;
+        this.store.setCurrentPage(currentPage + 1);
         this.isLoadingMore = false;
       },
       error: (error) => {

@@ -34,6 +34,24 @@ export class MovieDetailsComponent implements OnInit {
   movie: MovieDetails | null = null;
   isFavorite = false;
   isWishlist = false;
+
+  get movieDetails(): Array<{ label: string; value: string | null }> {
+    if (!this.movie) return [];
+    
+    return [
+      { label: 'Status', value: this.movie.status },
+      { label: 'Director', value: this.movie.credits.director },
+      { label: 'Language', value: this.movie.language },
+      { label: 'Release Date', value: this.movie.releaseDate },
+      { label: 'Budget', value: this.movie.budget ? `$${this.movie.budget.toLocaleString()}` : 'N/A' },
+      { label: 'Revenue', value: this.movie.revenue ? `$${this.movie.revenue.toLocaleString()}` : 'N/A' },
+      { 
+        label: 'Production', 
+        value: this.movie.productionCompanies.length ? this.movie.productionCompanies.join(', ') : null 
+      }
+    ].filter(detail => detail.value !== null);
+  }
+
   responsiveOptions = [
     {
       breakpoint: '1400px',
