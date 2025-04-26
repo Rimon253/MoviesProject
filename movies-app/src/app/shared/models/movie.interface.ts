@@ -56,4 +56,9 @@ export interface MovieDetails extends Movie {
   revenue: number;
   productionCompanies: string[];
   credits: MovieCredits;
+}
+
+export interface MovieFilters {
+  query: string;
+  selectedGenres: number[];
 } 

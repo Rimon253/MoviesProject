@@ -1,7 +1,7 @@
 <!-- Movie List Container -->
 <div class="movie-list-container">
   <!-- Search Component -->
-  <app-movie-search></app-movie-search>
+  <app-movie-search (filtersChanged)="onFiltersChanged($event)"></app-movie-search>
 
   <!-- Movies Grid -->
   <div class="movies-grid">

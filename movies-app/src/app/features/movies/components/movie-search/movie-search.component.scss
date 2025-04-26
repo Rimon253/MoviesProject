@@ -169,4 +169,137 @@
       }
     }
   }
+}
+
+.filter-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 100vh;
+  background: var(--surface-card);
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+
+  &.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid var(--surface-border);
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+  }
+
+  .filter-content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.search-section,
+.genres-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.875rem;
+  }
+}
+
+.search-section {
+  .p-input-icon-left {
+    width: 100%;
+
+    i {
+      color: var(--text-color-secondary);
+    }
+
+    input {
+      width: 100%;
+      padding-left: 2.5rem;
+    }
+  }
+}
+
+.genres-section {
+  ::ng-deep {
+    .p-multiselect {
+      width: 100%;
+
+      .p-multiselect-label {
+        padding: 0.75rem;
+      }
+
+      &.p-multiselect-chip {
+        .p-multiselect-token {
+          background: var(--primary-color);
+          color: var(--primary-color-text);
+          padding: 0.25rem 0.75rem;
+          border-radius: 1rem;
+          margin: 0.25rem;
+
+          .p-multiselect-token-icon {
+            margin-left: 0.5rem;
+            color: var(--primary-color-text);
+          }
+        }
+      }
+    }
+  }
+}
+
+.filter-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--surface-border);
+
+  button {
+    flex: 1;
+  }
+}
+
+.filter-toggle-button {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 999;
+  width: 3rem;
+  height: 3rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-panel {
+    width: 280px;
+  }
+
+  .filter-content {
+    padding: 1rem;
+  }
 } 

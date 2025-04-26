@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Movie, MovieDto, MovieDetails } from '../../shared/models/movie.interface';
+import { Movie, MovieDto, MovieDetails, Genre } from '../../shared/models/movie.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,8 @@ import { Movie, MovieDto, MovieDetails } from '../../shared/models/movie.interfa
 export class MovieService {
   private readonly baseUrl = environment.tmdbBaseUrl;
   private readonly apiKey = environment.tmdbApiKey;
+  private readonly discoverUrl = `${this.baseUrl}/discover/movie`;
+  private readonly popularUrl = `${this.baseUrl}/movie/popular`;
   private readonly languageMap: { [key: string]: string } = {
     'en': 'English',
     'es': 'Spanish',
@@ -48,15 +50,37 @@ export class MovieService {
       .pipe(map(res => res.results.map(this.mapMovieDto)));
   }
 
-  getPopularMovies(page: number = 1): Observable<Movie[]> {
+  getFilteredMovies(page: number = 1, withGenres?: number[]): Observable<Movie[]> {
+    const params: any = {
+      api_key: this.apiKey,
+      page: page.toString(),
+      language: environment.defaultLanguage,
+      sort_by: 'popularity.desc'
+    };
+
+    if (withGenres?.length) {
+      params.with_genres = withGenres.join(',');
+    }
+
     return this.http
-      .get<{ results: MovieDto[] }>(`${this.baseUrl}/movie/popular`, {
-        params: {
-          api_key: this.apiKey,
-          page: page.toString(),
-          language: environment.defaultLanguage
-        }
-      })
+      .get<{ results: MovieDto[] }>(this.discoverUrl, { params })
+      .pipe(map(res => res.results.map(this.mapMovieDto)));
+  }
+
+  getPopularMovies(page: number = 1, withGenres?: number[]): Observable<Movie[]> {
+    const params: any = {
+      api_key: this.apiKey,
+      page: page.toString(),
+      language: environment.defaultLanguage,
+      sort_by: 'popularity.desc'
+    };
+
+    if (withGenres?.length) {
+      params.with_genres = withGenres.join(',');
+    }
+
+    return this.http
+      .get<{ results: MovieDto[] }>(this.popularUrl, { params })
       .pipe(map(res => res.results.map(this.mapMovieDto)));
   }
 
@@ -117,6 +141,17 @@ export class MovieService {
           }
         }))
       );
+  }
+
+  getGenres(): Observable<Genre[]> {
+    return this.http
+      .get<{ genres: Genre[] }>(`${this.baseUrl}/genre/movie/list`, {
+        params: {
+          api_key: this.apiKey,
+          language: environment.defaultLanguage
+        }
+      })
+      .pipe(map(response => response.genres));
   }
 
   private mapMovieDto(dto: MovieDto): Movie {

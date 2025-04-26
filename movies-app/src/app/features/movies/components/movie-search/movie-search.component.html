@@ -26,4 +26,71 @@
       </div>
     </ng-template>
   </p-autoComplete>
-</div> 
+</div>
+
+<div class="filter-panel" [class.collapsed]="!isFilterPanelVisible">
+  <div class="filter-header">
+    <h3>Filters</h3>
+    <button pButton 
+      icon="pi pi-times"
+      class="p-button-rounded p-button-text p-button-sm"
+      (click)="toggleFilterPanel()">
+    </button>
+  </div>
+
+  <div class="filter-content">
+    <div class="search-section">
+      <label for="movieSearch">Movie Title</label>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input 
+          id="movieSearch"
+          type="text" 
+          pInputText 
+          [(ngModel)]="searchQuery" 
+          placeholder="Search movies..."
+        />
+      </span>
+    </div>
+
+    <div class="genres-section">
+      <label>Genres</label>
+      <p-multiSelect
+        [options]="genres"
+        [(ngModel)]="selectedGenres"
+        [display]="'chip'"
+        optionLabel="name"
+        placeholder="Select genres"
+        [showToggleAll]="true"
+        [showHeader]="false"
+        (onChange)="onGenreChange($event)">
+      </p-multiSelect>
+    </div>
+
+    <div class="filter-actions">
+      <button pButton 
+        label="Apply Filters"
+        icon="pi pi-filter"
+        (click)="applyFilters()"
+        [disabled]="!searchQuery && selectedGenres.length === 0">
+      </button>
+      <button pButton 
+        label="Clear"
+        icon="pi pi-filter-slash"
+        class="p-button-outlined"
+        (click)="clearFilters()"
+        [disabled]="!searchQuery && selectedGenres.length === 0">
+      </button>
+    </div>
+  </div>
+</div>
+
+<button 
+  *ngIf="!isFilterPanelVisible"
+  pButton 
+  icon="pi pi-filter"
+  class="filter-toggle-button p-button-rounded"
+  (click)="toggleFilterPanel()"
+  pTooltip="Show Filters"
+  tooltipPosition="right">
+</button> 

@@ -4,7 +4,7 @@ import { MovieCardComponent } from '../movie-card/movie-card.component';
 import { MovieSearchComponent } from '../movie-search/movie-search.component';
 import { MovieService } from '../../../../core/services/movie.service';
 import { MoviesStore } from '../../../../core/state/movies.state';
-import { Movie } from '../../../../shared/models/movie.interface';
+import { Movie, MovieFilters } from '../../../../shared/models/movie.interface';
 import { Router } from '@angular/router';
 
 @Component({
@@ -40,6 +40,40 @@ export class MovieListComponent implements OnInit {
 
     if (windowHeight + scrollTop >= documentHeight - 200) {
       this.loadMovies();
+    }
+  }
+
+  onFiltersChanged(filters: MovieFilters): void {
+    this.store.setLoading(true);
+    this.store.setMovies([]); // Clear existing movies
+    this.store.setCurrentPage(1); // Reset to first page
+
+    if (filters.query) {
+      // If there's a search query, use search endpoint
+      this.movieService.searchMovies(filters.query).subscribe({
+        next: (movies) => {
+          this.store.setMovies(movies);
+          this.store.setLoading(false);
+        },
+        error: (error) => {
+          console.error('Error searching movies:', error);
+          this.store.setError('Failed to search movies');
+          this.store.setLoading(false);
+        }
+      });
+    } else {
+      // If no search query, get filtered movies by genre
+      this.movieService.getFilteredMovies(1, filters.selectedGenres).subscribe({
+        next: (movies) => {
+          this.store.setMovies(movies);
+          this.store.setLoading(false);
+        },
+        error: (error) => {
+          console.error('Error filtering movies:', error);
+          this.store.setError('Failed to filter movies');
+          this.store.setLoading(false);
+        }
+      });
     }
   }
 
@@ -84,4 +118,4 @@ export class MovieListComponent implements OnInit {
   onShowDetails(movie: Movie): void {
     this.router.navigate(['/movie', movie.id]);
   }
-} 
+}
