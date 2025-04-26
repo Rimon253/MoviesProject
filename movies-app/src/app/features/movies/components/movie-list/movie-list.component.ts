@@ -22,7 +22,13 @@ export class MovieListComponent implements OnInit {
   movies = this.store.movies;
   loading = this.store.loading;
   isLoadingMore = false;
-  currentPage = 1;
+  currentFilters: { 
+    query?: string; 
+    selectedGenres: number[]; 
+    primary_release_year?: number 
+  } = {
+    selectedGenres: []
+  };
 
   ngOnInit(): void {
     if (this.movies().length === 0) {
@@ -45,25 +51,11 @@ export class MovieListComponent implements OnInit {
 
   onFiltersChanged(filters: { query: string; selectedGenres: number[]; primary_release_year?: number }): void {
     this.store.setMovies([]);
-    this.currentPage = 1;
+    this.store.setCurrentPage(1);
+    this.currentFilters = filters;
     this.store.setLoading(true);
     
-    this.movieService.getFilteredMovies(
-      this.currentPage,
-      filters.selectedGenres,
-      filters.primary_release_year,
-      filters.query || undefined
-    ).subscribe({
-      next: (movies) => {
-        this.store.setMovies(movies);
-        this.store.setLoading(false);
-      },
-      error: (error) => {
-        console.error('Error filtering movies:', error);
-        this.store.setError('Failed to filter movies');
-        this.store.setLoading(false);
-      }
-    });
+    this.loadMovies();
   }
 
   loadMovies(): void {
@@ -72,9 +64,18 @@ export class MovieListComponent implements OnInit {
     
     const currentPage = this.store.currentPage();
     
-    this.movieService.getPopularMovies(currentPage).subscribe({
+    this.movieService.getFilteredMovies(
+      currentPage,
+      this.currentFilters.selectedGenres,
+      this.currentFilters.primary_release_year,
+      this.currentFilters.query
+    ).subscribe({
       next: (movies) => {
-        this.store.setMovies([...this.movies(), ...movies]);
+        if (currentPage === 1) {
+          this.store.setMovies(movies);
+        } else {
+          this.store.setMovies([...this.movies(), ...movies]);
+        }
         this.store.setLoading(false);
         this.store.setCurrentPage(currentPage + 1);
         this.isLoadingMore = false;
