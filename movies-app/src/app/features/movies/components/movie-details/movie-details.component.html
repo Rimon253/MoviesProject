@@ -8,11 +8,17 @@
 
 <div class="movie-details" *ngIf="movie">
   <!-- Hero Section -->
-  <div class="hero" [style.backgroundImage]="'url(' + movie.backdropUrl + ')'">
+  <div class="hero" [ngStyle]="{'background-image': movie.backdropUrl ? 'url(' + movie.backdropUrl + ')' : 'none'}">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="poster">
-        <img [src]="movie.posterUrl" [alt]="movie.title" />
+        @if (movie.posterUrl) {
+          <img [src]="movie.posterUrl" [alt]="movie.title" />
+        } @else {
+          <div class="no-image">
+            <i class="pi pi-image"></i>
+          </div>
+        }
       </div>
       <div class="info">
         <h1>{{ movie.title }}</h1>

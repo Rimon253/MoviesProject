@@ -56,6 +56,21 @@
     height: 100%;
     object-fit: cover;
   }
+
+  .no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-card);
+    color: var(--text-color-secondary);
+
+    .pi {
+      font-size: 4rem;
+      opacity: 0.5;
+    }
+  }
 }
 
 .info {
@@ -133,6 +148,19 @@
         padding: 0;
       }
 
+      .p-carousel-container {
+        padding: 0.5rem 2rem;
+      }
+
+      .p-carousel-items-container {
+        margin: 0 -0.5rem;
+      }
+
+      .p-carousel-items-content {
+        display: flex;
+        align-items: stretch;
+      }
+
       .p-carousel-prev,
       .p-carousel-next {
         width: 3rem;
@@ -141,6 +169,7 @@
         background: var(--surface-card);
         border-radius: 50%;
         margin: 0 -1.5rem;
+        transform: translateY(-50%);
         
         &:hover {
           background: var(--surface-hover);
@@ -153,6 +182,9 @@
 
       .carousel-item {
         padding: 0.5rem;
+        height: 100%;
+        display: flex;
+        justify-content: center;
       }
     }
   }

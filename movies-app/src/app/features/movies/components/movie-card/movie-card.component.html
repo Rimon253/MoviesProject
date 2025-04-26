@@ -1,6 +1,12 @@
 <div class="movie-card" (click)="onShowDetails()">
   <div class="poster-container">
-    <img [src]="movie.posterUrl" [alt]="movie.title" class="movie-poster" />
+    @if (movie.posterUrl) {
+      <img [src]="movie.posterUrl" [alt]="movie.title" class="movie-poster" />
+    } @else {
+      <div class="no-image">
+        <i class="pi pi-image"></i>
+      </div>
+    }
     <div class="rating">
       <span class="rating-value">{{ movie.rating | number:'1.1-1' }}</span>
     </div>
