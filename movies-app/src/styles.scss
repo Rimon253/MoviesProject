@@ -13,14 +13,19 @@
   --surface-card: #262626;
   --surface-overlay: #2a2a2a;
   --surface-border: #383838;
+  --font-heading: 'Nunito', sans-serif;
+  --font-body: 'Nunito', sans-serif;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-body);
+  font-weight: 400;
   background-color: var(--surface-ground);
   color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Scrollbar Styles */
@@ -74,4 +79,16 @@ body {
 /* Button Overrides */
 .p-button {
   border-radius: 4px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0px;
+  text-transform: none;
+  margin: 0;
+}
+
+.p-component {
+  font-family: var(--font-body);
 }
