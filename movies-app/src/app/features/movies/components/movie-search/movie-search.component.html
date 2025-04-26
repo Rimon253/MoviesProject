@@ -1,33 +1,3 @@
-<div class="search-container">
-  <p-autoComplete
-    [(ngModel)]="searchQuery"
-    [suggestions]="suggestions"
-    (completeMethod)="search($event)"
-    (onSelect)="onSelect($event)"
-    [field]="'title'"
-    [dropdown]="true"
-    [showClear]="true"
-    placeholder="Search for movies..."
-    [style]="{ width: '100%' }"
-  >
-    <ng-template let-movie pTemplate="item">
-      <div class="search-item">
-        <img [src]="movie.posterUrl" [alt]="movie.title" class="search-item-poster" />
-        <div class="search-item-info">
-          <div class="search-item-title">{{ movie.title }}</div>
-          <div class="search-item-meta">
-            <span class="year">{{ movie.year }}</span>
-            <span class="rating">
-              <i class="pi pi-star-fill"></i>
-              {{ movie.rating | number:'1.1-1' }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-  </p-autoComplete>
-</div>
-
 <div class="filter-panel" [class.collapsed]="!isFilterPanelVisible">
   <div class="filter-header">
     <h3>Filters</h3>

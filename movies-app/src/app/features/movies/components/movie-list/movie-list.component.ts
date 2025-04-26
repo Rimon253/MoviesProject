@@ -32,7 +32,7 @@ export class MovieListComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
-    if (this.isLoadingMore || this.loading()) return;
+    if (this.isLoadingMore || this.loading() || this.movies().length === 0) return;
 
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
