@@ -1,13 +1,14 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { CarouselModule } from 'primeng/carousel';
-import { ActivatedRoute } from '@angular/router';
+import { TooltipModule } from 'primeng/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MovieService } from '../../../../core/services/movie.service';
 import { MoviesStore } from '../../../../core/state/movies.state';
-import { MovieDetails } from '../../../../shared/models/movie.interface';
+import { MovieDetails, Genre } from '../../../../shared/models/movie.interface';
 import { CastMemberComponent } from '../cast-member/cast-member.component';
 
 @Component({
@@ -15,11 +16,18 @@ import { CastMemberComponent } from '../cast-member/cast-member.component';
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, ButtonModule, ChipModule, CarouselModule, CastMemberComponent]
+  imports: [
+    CommonModule, 
+    ButtonModule, 
+    ChipModule, 
+    CarouselModule, 
+    CastMemberComponent
+  ]
 })
 export class MovieDetailsComponent implements OnInit {
   private movieService = inject(MovieService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private store = inject(MoviesStore);
   private location = inject(Location);
 
@@ -54,6 +62,11 @@ export class MovieDetailsComponent implements OnInit {
     }
   ];
 
+  @HostListener('document:keydown.escape')
+  onEscapePress(): void {
+    this.goBack();
+  }
+
   ngOnInit(): void {
     const movieId = this.route.snapshot.paramMap.get('id');
     if (movieId) {
@@ -74,7 +87,8 @@ export class MovieDetailsComponent implements OnInit {
                 character: cast.character,
                 profilePath: cast.profilePath,
                 order: cast.order
-              })).sort((a, b) => a.order - b.order)
+              })).sort((a, b) => a.order - b.order),
+              director: movie.credits.director
             }
           };
           this.checkFavoriteStatus();
@@ -115,5 +129,15 @@ export class MovieDetailsComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  onGenreClick(genre: Genre): void {
+    // Navigate to movie list with genre filter
+    this.router.navigate(['/movies'], { 
+      queryParams: { 
+        genre: genre.id,
+        genreName: genre.name
+      }
+    });
   }
 } 

@@ -1,16 +1,15 @@
-<!-- Back Button -->
+<!-- Close Button -->
 <button pButton 
-  icon="pi pi-arrow-left" 
-  label="Back to Movies"
-  class="back-button p-button-text"
-  (click)="goBack()">
+  icon="pi pi-times" 
+  class="close-button p-button-rounded p-button-text"
+  (click)="goBack()"
+  aria-label="Close">
 </button>
 
 <div class="movie-details" *ngIf="movie">
-  <!-- Hero Section -->
-  <div class="hero" [ngStyle]="{'background-image': movie.backdropUrl ? 'url(' + movie.backdropUrl + ')' : 'none'}">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
+  <div class="movie" [ngStyle]="{'background-image': movie.backdropUrl ? 'url(' + movie.backdropUrl + ')' : 'none'}">
+    <div class="movie-overlay"></div>
+    <div class="movie-content">
       <div class="poster">
         @if (movie.posterUrl) {
           <img [src]="movie.posterUrl" [alt]="movie.title" />
@@ -21,36 +20,82 @@
         }
       </div>
       <div class="info">
-        <h1>{{ movie.title }}</h1>
-        <div class="meta">
-          <span class="year">{{ movie.year }}</span>
-          <span class="separator">•</span>
-          <span class="rating">
-            <i class="pi pi-star-fill"></i>
-            {{ movie.rating | number:'1.1-1' }}
-          </span>
-          <span class="separator">•</span>
-          <span class="genres">{{ movie.genres.join(', ') }}</span>
+        <div class="header">
+          <h1>{{ movie.title }}</h1>
+          <div class="actions">
+            <button pButton 
+              [icon]="isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
+              class="p-button-rounded"
+              [class.p-button-danger]="isFavorite"
+              (click)="toggleFavorite()">
+            </button>
+            <button pButton 
+              [icon]="isWishlist ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"
+              class="p-button-rounded"
+              [class.p-button-info]="isWishlist"
+              (click)="toggleWishlist()">
+            </button>
+          </div>
         </div>
-        <p class="overview">{{ movie.overview }}</p>
-        <div class="actions">
-          <button pButton 
-            label="Watch Trailer" 
-            icon="pi pi-play" 
-            class="p-button-rounded">
-          </button>
-          <button pButton 
-            [icon]="isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
-            class="p-button-rounded"
-            [class.p-button-danger]="isFavorite"
-            (click)="toggleFavorite()">
-          </button>
-          <button pButton 
-            [icon]="isWishlist ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"
-            class="p-button-rounded"
-            [class.p-button-info]="isWishlist"
-            (click)="toggleWishlist()">
-          </button>
+        <div class="meta">
+          <div class="meta-row">
+            <span class="rating">
+              <i class="pi pi-star-fill"></i>
+              {{ movie.rating | number:'1.1-1' }} /10
+            </span>
+            <span class="separator">•</span>
+            <span>{{ movie.year }}</span>
+            <span class="separator">•</span>
+            <span>{{ movie.runtime }} min</span>
+          </div>
+          <div class="meta-row genres">
+            @for (genre of movie.genres; track genre.id) {
+              <p-chip 
+                [label]="genre.name"
+                [removable]="false"
+                (click)="onGenreClick(genre)"
+                styleClass="genre-chip">
+              </p-chip>
+            }
+          </div>
+        </div>
+
+        <div class="overview">
+          <h2>Overview</h2>
+          <p>{{ movie.overview }}</p>
+        </div>
+
+        <div class="details-grid">
+          <div class="detail-item">
+            <label>Status</label>
+            <span>{{ movie.status }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Director</label>
+            <span>{{ movie.credits.director }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Language</label>
+            <span>{{ movie.language }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Release Date</label>
+            <span>{{ movie.releaseDate | date }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Budget</label>
+            <span>{{ movie.budget | currency }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Revenue</label>
+            <span>{{ movie.revenue | currency }}</span>
+          </div>
+          @if (movie.productionCompanies.length) {
+            <div class="detail-item">
+              <label>Production</label>
+              <span>{{ movie.productionCompanies.join(', ') }}</span>
+            </div>
+          }
         </div>
       </div>
     </div>

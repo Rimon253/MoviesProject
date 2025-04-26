@@ -16,19 +16,13 @@ export interface GenreDto {
   name: string;
 }
 
-export interface CreditsDto {
-  cast: Array<{
-    name: string;
-    character: string;
-    profile_path: string | null;
-  }>;
-  crew: Array<{
-    name: string;
-    job: string;
-  }>;
-}
 
 // Frontend Models
+export interface Genre {
+  id: number;
+  name: string;
+}
+
 export interface Movie {
   id: number;
   title: string;
@@ -37,7 +31,7 @@ export interface Movie {
   backdropUrl: string;
   rating: number;
   year: string;
-  genres: string[];
+  genres: Genre[];
 }
 
 export interface CastMember {
@@ -50,8 +44,16 @@ export interface CastMember {
 
 export interface MovieCredits {
   cast: CastMember[];
+  director: string;
 }
 
 export interface MovieDetails extends Movie {
+  runtime: number;
+  language: string;
+  releaseDate: string;
+  status: string;
+  budget: number;
+  revenue: number;
+  productionCompanies: string[];
   credits: MovieCredits;
 } 
