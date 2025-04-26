@@ -67,19 +67,32 @@
       </p-multiSelect>
     </div>
 
+    <div class="year-section">
+      <label>Release Year</label>
+      <p-dropdown
+        [options]="years"
+        [(ngModel)]="selectedYear"
+        [showClear]="true"
+        placeholder="Select year"
+        optionLabel="label"
+        optionValue="value"
+        [style]="{ width: '100%' }">
+      </p-dropdown>
+    </div>
+
     <div class="filter-actions">
       <button pButton 
         label="Apply Filters"
         icon="pi pi-filter"
         (click)="applyFilters()"
-        [disabled]="!searchQuery && selectedGenres.length === 0">
+        [disabled]="!hasActiveFilters()">
       </button>
       <button pButton 
         label="Clear"
         icon="pi pi-filter-slash"
         class="p-button-outlined"
         (click)="clearFilters()"
-        [disabled]="!searchQuery && selectedGenres.length === 0">
+        [disabled]="!hasActiveFilters()">
       </button>
     </div>
   </div>

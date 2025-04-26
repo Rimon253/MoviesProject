@@ -4,7 +4,7 @@ import { MovieCardComponent } from '../movie-card/movie-card.component';
 import { MovieSearchComponent } from '../movie-search/movie-search.component';
 import { MovieService } from '../../../../core/services/movie.service';
 import { MoviesStore } from '../../../../core/state/movies.state';
-import { Movie, MovieFilters } from '../../../../shared/models/movie.interface';
+import { Movie } from '../../../../shared/models/movie.interface';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,10 +22,10 @@ export class MovieListComponent implements OnInit {
   movies = this.store.movies;
   loading = this.store.loading;
   isLoadingMore = false;
+  currentPage = 1;
 
   ngOnInit(): void {
     if (this.movies().length === 0) {
-      this.store.setCurrentPage(1);
       this.loadMovies();
     }
   }
@@ -43,38 +43,27 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  onFiltersChanged(filters: MovieFilters): void {
+  onFiltersChanged(filters: { query: string; selectedGenres: number[]; primary_release_year?: number }): void {
+    this.store.setMovies([]);
+    this.currentPage = 1;
     this.store.setLoading(true);
-    this.store.setMovies([]); // Clear existing movies
-    this.store.setCurrentPage(1); // Reset to first page
-
-    if (filters.query) {
-      // If there's a search query, use search endpoint
-      this.movieService.searchMovies(filters.query).subscribe({
-        next: (movies) => {
-          this.store.setMovies(movies);
-          this.store.setLoading(false);
-        },
-        error: (error) => {
-          console.error('Error searching movies:', error);
-          this.store.setError('Failed to search movies');
-          this.store.setLoading(false);
-        }
-      });
-    } else {
-      // If no search query, get filtered movies by genre
-      this.movieService.getFilteredMovies(1, filters.selectedGenres).subscribe({
-        next: (movies) => {
-          this.store.setMovies(movies);
-          this.store.setLoading(false);
-        },
-        error: (error) => {
-          console.error('Error filtering movies:', error);
-          this.store.setError('Failed to filter movies');
-          this.store.setLoading(false);
-        }
-      });
-    }
+    
+    this.movieService.getFilteredMovies(
+      this.currentPage,
+      filters.selectedGenres,
+      filters.primary_release_year,
+      filters.query || undefined
+    ).subscribe({
+      next: (movies) => {
+        this.store.setMovies(movies);
+        this.store.setLoading(false);
+      },
+      error: (error) => {
+        console.error('Error filtering movies:', error);
+        this.store.setError('Failed to filter movies');
+        this.store.setLoading(false);
+      }
+    });
   }
 
   loadMovies(): void {

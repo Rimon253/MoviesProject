@@ -37,50 +37,45 @@ export class MovieService {
 
   constructor(private http: HttpClient) { }
 
-  searchMovies(query: string, page: number = 1): Observable<Movie[]> {
+  getFilteredMovies(page: number = 1, withGenres?: number[], primary_release_year?: number, query?: string): Observable<Movie[]> {
+    const params: any = {
+      api_key: this.apiKey,
+      page: page.toString(),
+      language: environment.defaultLanguage,
+      sort_by: 'popularity.desc'
+    };
+
+    if (withGenres?.length) {
+      params.with_genres = withGenres.join(',');
+    }
+
+    if (primary_release_year) {
+      params.primary_release_year = primary_release_year.toString();
+    }
+
+    // If there's a search query, use search endpoint, otherwise use discover endpoint
+    const endpoint = query 
+      ? `${this.baseUrl}/search/movie`
+      : this.discoverUrl;
+
+    if (query) {
+      params.query = query;
+    }
+
     return this.http
-      .get<{ results: MovieDto[] }>(`${this.baseUrl}/search/movie`, {
+      .get<{ results: MovieDto[] }>(endpoint, { params })
+      .pipe(map(res => res.results.map(this.mapMovieDto)));
+  }
+
+  getPopularMovies(page: number = 1): Observable<Movie[]> {
+    return this.http
+      .get<{ results: MovieDto[] }>(this.popularUrl, {
         params: {
           api_key: this.apiKey,
-          query,
           page: page.toString(),
           language: environment.defaultLanguage
         }
       })
-      .pipe(map(res => res.results.map(this.mapMovieDto)));
-  }
-
-  getFilteredMovies(page: number = 1, withGenres?: number[]): Observable<Movie[]> {
-    const params: any = {
-      api_key: this.apiKey,
-      page: page.toString(),
-      language: environment.defaultLanguage,
-      sort_by: 'popularity.desc'
-    };
-
-    if (withGenres?.length) {
-      params.with_genres = withGenres.join(',');
-    }
-
-    return this.http
-      .get<{ results: MovieDto[] }>(this.discoverUrl, { params })
-      .pipe(map(res => res.results.map(this.mapMovieDto)));
-  }
-
-  getPopularMovies(page: number = 1, withGenres?: number[]): Observable<Movie[]> {
-    const params: any = {
-      api_key: this.apiKey,
-      page: page.toString(),
-      language: environment.defaultLanguage,
-      sort_by: 'popularity.desc'
-    };
-
-    if (withGenres?.length) {
-      params.with_genres = withGenres.join(',');
-    }
-
-    return this.http
-      .get<{ results: MovieDto[] }>(this.popularUrl, { params })
       .pipe(map(res => res.results.map(this.mapMovieDto)));
   }
 

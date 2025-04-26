@@ -9,12 +9,14 @@ import { Movie, Genre } from '../../../../shared/models/movie.interface';
 import { Router } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
 import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 export interface MovieFilters {
   query: string;
   selectedGenres: number[];
+  primary_release_year?: number;
 }
 
 @Component({
@@ -26,7 +28,8 @@ export interface MovieFilters {
     InputTextModule,
     ButtonModule,
     AutoCompleteModule,
-    MultiSelectModule
+    MultiSelectModule,
+    DropdownModule
   ],
   templateUrl: './movie-search.component.html',
   styleUrls: ['./movie-search.component.scss']
@@ -43,8 +46,15 @@ export class MovieSearchComponent {
   suggestions: Movie[] = [];
   genres: Genre[] = [];
   selectedGenres: Genre[] = [];
+  selectedYear: number | null = null;
   isFilterPanelVisible = true;
   isLoading = false;
+
+  // Generate years from 1900 to current year
+  years = Array.from(
+    { length: new Date().getFullYear() - 1900 + 1 },
+    (_, i) => ({ label: (new Date().getFullYear() - i).toString(), value: new Date().getFullYear() - i })
+  );
 
   constructor() {
     this.loadGenres();
@@ -56,12 +66,12 @@ export class MovieSearchComponent {
       filter(query => query.length >= 3),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap(query => this.movieService.searchMovies(query))
+      switchMap(query => this.movieService.getFilteredMovies(1, [], undefined, query))
     ).subscribe({
-      next: (movies) => {
+      next: (movies: Movie[]) => {
         this.suggestions = movies;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error searching movies:', error);
         this.store.setError('Failed to search movies');
       }
@@ -98,41 +108,31 @@ export class MovieSearchComponent {
     this.isLoading = true;
     this.store.setLoading(true);
 
-    // Emit the filters for any parent components that need them
     const filters: MovieFilters = {
       query: this.searchQuery,
       selectedGenres: this.selectedGenres.map(genre => genre.id)
     };
+
+    if (this.selectedYear) {
+      filters.primary_release_year = this.selectedYear;
+    }
+
     this.filtersChanged.emit(filters);
-
-    // Use search if there's a query, otherwise use filtered discover endpoint
-    const request = this.searchQuery
-      ? this.movieService.searchMovies(this.searchQuery)
-      : this.movieService.getFilteredMovies(1, filters.selectedGenres);
-
-    request.subscribe({
-      next: (movies) => {
-        this.store.setMovies(movies);
-        this.isLoading = false;
-        this.store.setLoading(false);
-      },
-      error: (error) => {
-        console.error('Error applying filters:', error);
-        this.store.setError('Failed to filter movies');
-        this.isLoading = false;
-        this.store.setLoading(false);
-      }
-    });
+    this.isLoading = false;
   }
 
   clearFilters(): void {
     this.searchQuery = '';
     this.selectedGenres = [];
-    this.store.setMovies([]);
+    this.selectedYear = null;
     this.applyFilters();
   }
 
   toggleFilterPanel(): void {
     this.isFilterPanelVisible = !this.isFilterPanelVisible;
+  }
+
+  hasActiveFilters(): boolean {
+    return !!(this.searchQuery || this.selectedGenres.length > 0 || this.selectedYear);
   }
 } 
