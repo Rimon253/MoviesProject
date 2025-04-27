@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MovieCardComponent } from './movie-card.component';
+import { Router } from '@angular/router';
+import { Movie } from '../../../../shared/models/movie.interface';
+import { By } from '@angular/platform-browser';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { RouterModule } from '@angular/router';
-import { Movie } from '../../../../shared/models/movie.interface';
 
 describe('MovieCardComponent', () => {
   let component: MovieCardComponent;
   let fixture: ComponentFixture<MovieCardComponent>;
+  let router: { navigate: jest.Mock };
 
   const mockMovie: Movie = {
     id: 1,
@@ -17,23 +19,28 @@ describe('MovieCardComponent', () => {
     year: '2024',
     genres: [],
     rating: 8.5,
-    posterUrl: 'test-url.jpg',
-    backdropUrl: 'test-backdrop.jpg'
+    posterUrl: '/test-poster.jpg',
+    backdropUrl: '/test-backdrop.jpg'
   };
 
   beforeEach(async () => {
+    const routerMock = {
+      navigate: jest.fn()
+    };
+
     await TestBed.configureTestingModule({
       imports: [
+        MovieCardComponent,
         CardModule,
         ButtonModule,
-        ProgressSpinnerModule,
-        RouterModule.forRoot([]),
-        MovieCardComponent
+        ProgressSpinnerModule
+      ],
+      providers: [
+        { provide: Router, useValue: routerMock }
       ]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
+    router = TestBed.inject(Router) as any;
     fixture = TestBed.createComponent(MovieCardComponent);
     component = fixture.componentInstance;
     component.movie = mockMovie;
@@ -44,47 +51,119 @@ describe('MovieCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit when favorite is toggled', () => {
-    const spy = spyOn(component.toggleFavorite, 'emit');
-    component.toggleFavorite.emit();
-    expect(spy).toHaveBeenCalled();
+  describe('Movie Display', () => {
+    it('should display movie title', () => {
+      const titleElement = fixture.debugElement.query(By.css('.movie-title'));
+      expect(titleElement.nativeElement.textContent).toBe('Test Movie');
+    });
+
+    it('should display movie year', () => {
+      const yearElement = fixture.debugElement.query(By.css('.release-date'));
+      expect(yearElement.nativeElement.textContent).toBe('2024');
+    });
+
+    it('should display movie rating', () => {
+      const ratingElement = fixture.debugElement.query(By.css('.rating-value'));
+      expect(ratingElement.nativeElement.textContent).toContain('8.5');
+    });
   });
 
-  it('should emit when wishlist is toggled', () => {
-    const spy = spyOn(component.toggleWishlist, 'emit');
-    component.toggleWishlist.emit();
-    expect(spy).toHaveBeenCalled();
+  describe('Poster Handling', () => {
+    it('should display movie poster when posterUrl exists', () => {
+      const imgElement = fixture.debugElement.query(By.css('.movie-poster'));
+      expect(imgElement).toBeTruthy();
+      expect(imgElement.properties['src']).toBe('/test-poster.jpg');
+      expect(imgElement.properties['alt']).toBe('Test Movie');
+    });
+
+    it('should display fallback when no posterUrl exists', () => {
+      component.movie = { ...mockMovie, posterUrl: '' };
+      fixture.detectChanges();
+
+      const noImageElement = fixture.debugElement.query(By.css('.no-image'));
+      const iconElement = fixture.debugElement.query(By.css('.pi-image'));
+      
+      expect(noImageElement).toBeTruthy();
+      expect(iconElement).toBeTruthy();
+    });
+
+    it('should handle image load success', () => {
+      component.onImageLoad();
+      expect(component.isLoading).toBe(false);
+      expect(component.imageError).toBe(false);
+    });
+
+    it('should handle image load error', () => {
+      component.onImageError();
+      expect(component.isLoading).toBe(false);
+      expect(component.imageError).toBe(true);
+    });
   });
 
-  it('should emit when details are requested', () => {
-    const spy = spyOn(component.showDetails, 'emit');
-    component.showDetails.emit();
-    expect(spy).toHaveBeenCalled();
+  describe('Navigation', () => {
+    it('should navigate to movie details on click', () => {
+      const card = fixture.debugElement.query(By.css('.movie-card'));
+      card.triggerEventHandler('click', null);
+      
+      expect(router.navigate).toHaveBeenCalledWith(['/movie', mockMovie.id]);
+    });
+
+    it('should navigate to correct movie when multiple cards exist', () => {
+      component.onShowDetails();
+      expect(router.navigate).toHaveBeenCalledWith(['/movie', 1]);
+
+      component.movie = { ...mockMovie, id: 2 };
+      component.onShowDetails();
+      expect(router.navigate).toHaveBeenCalledWith(['/movie', 2]);
+    });
   });
 
-  it('should handle image load event', () => {
-    component.onImageLoad();
-    expect(component.isLoading).toBeFalse();
-    expect(component.imageError).toBeFalse();
+  describe('Component Interaction', () => {
+    it('should require movie input', () => {
+      expect(() => {
+        component.movie = undefined as any;
+        fixture.detectChanges();
+      }).toThrow();
+    });
   });
 
-  it('should handle image error event', () => {
-    component.onImageError();
-    expect(component.isLoading).toBeFalse();
-    expect(component.imageError).toBeTrue();
+  describe('Styling and Layout', () => {
+    it('should have correct structure', () => {
+      const card = fixture.debugElement.query(By.css('.movie-card'));
+      const posterContainer = fixture.debugElement.query(By.css('.poster-container'));
+      const info = fixture.debugElement.query(By.css('.movie-info'));
+
+      expect(card).toBeTruthy();
+      expect(posterContainer).toBeTruthy();
+      expect(info).toBeTruthy();
+    });
+
+    it('should display rating with correct format', () => {
+      component.movie = { ...mockMovie, rating: 8.567 };
+      fixture.detectChanges();
+
+      const ratingElement = fixture.debugElement.query(By.css('.rating-value'));
+      expect(ratingElement.nativeElement.textContent.trim()).toBe('8.6');
+    });
   });
 
-  it('should show loader while image is loading', () => {
-    component.isLoading = true;
-    fixture.detectChanges();
-    const loader = fixture.nativeElement.querySelector('.movie-card__loader');
-    expect(loader).toBeTruthy();
-  });
+  describe('Error States', () => {
+    it('should handle missing movie data gracefully', () => {
+      component.movie = {
+        ...mockMovie,
+        title: '',
+        year: '',
+        rating: 0
+      };
+      fixture.detectChanges();
 
-  it('should show no image placeholder when image fails to load', () => {
-    component.imageError = true;
-    fixture.detectChanges();
-    const noImage = fixture.nativeElement.querySelector('.movie-card__no-image');
-    expect(noImage).toBeTruthy();
+      const titleElement = fixture.debugElement.query(By.css('.movie-title'));
+      const yearElement = fixture.debugElement.query(By.css('.release-date'));
+      const ratingElement = fixture.debugElement.query(By.css('.rating-value'));
+
+      expect(titleElement.nativeElement.textContent).toBe('');
+      expect(yearElement.nativeElement.textContent).toBe('');
+      expect(ratingElement.nativeElement.textContent).toBe('0.0');
+    });
   });
 }); 

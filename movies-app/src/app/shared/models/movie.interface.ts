@@ -52,8 +52,8 @@ export interface MovieDetails extends Movie {
   language: string;
   releaseDate: string;
   status: string;
-  budget: number;
-  revenue: number;
+  budget: number | null;
+  revenue: number | null;
   productionCompanies: string[];
   credits: MovieCredits;
 }
