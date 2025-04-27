@@ -173,20 +173,17 @@
 
 .filter-panel {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 320px;
-  height: 100vh;
+  top: 80px;
+  left: 20px;
+  width: 300px;
+  max-height: calc(100vh - 100px);
   background: var(--surface-card);
-  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
-
-  &.collapsed {
-    transform: translateX(-100%);
-  }
+  overflow: hidden;
 
   .filter-header {
     display: flex;
@@ -266,19 +263,6 @@
   }
 }
 
-.filter-toggle-button {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 999;
-  width: 3rem;
-  height: 3rem;
-  transition: all 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-}
 
 .filter-disabled-message {
   display: block;

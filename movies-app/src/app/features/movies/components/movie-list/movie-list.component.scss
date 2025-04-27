@@ -1,61 +1,30 @@
 .movie-list-container {
   padding: 2rem;
+  padding-left: calc(340px); // 300px filter width + 40px spacing
   min-height: 100vh;
 
   .movies-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-
-  .no-results {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 4rem auto;
-    text-align: center;
-    color: var(--text-color);
-    
-    .pi {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.7;
-    }
-
-    p {
-      margin: 0.5rem 0;
-      font-size: 1.2rem;
-
-      &.subtitle {
-        color: var(--text-color-secondary);
-        font-size: 1rem;
-      }
-    }
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
   }
 
   .loading-spinner {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    margin: 2rem 0;
-    
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #3498db;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
+    padding: 2rem;
+  }
 
-    p {
-      margin-top: 1rem;
-      color: #fff;
-      font-size: 1rem;
-    }
+  .no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-color-secondary);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .movie-list {
+    padding-left: 2rem; // Reset padding on mobile
   }
 }
 
@@ -65,13 +34,32 @@
 }
 
 // Responsive adjustments
-@media (max-width: 768px) {
-  .movie-list-container {
-    padding: 1rem;
+@media (max-width: 1200px) {
+  .movie-list {
+    .movies-grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
   }
+}
+
+@media (max-width: 768px) {
+  .movie-list {
+    padding: 1rem;
+    
+    .movies-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+  }
+}
+
+.scroll-message {
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-color);
+  opacity: 0.8;
   
-  .movies-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1rem;
+  i {
+    margin-right: 0.5rem;
   }
 } 

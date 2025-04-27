@@ -31,4 +31,10 @@
       <p>Loading movies...</p>
     </div>
   }
+
+  @if (!loading() && movies().length > 0 && store.currentPage() <= totalPages()) {
+    <div class="scroll-message">
+      <p><i class="pi pi-info-circle"></i> Scroll down to get more results!</p>
+    </div>
+  }
 </div> 

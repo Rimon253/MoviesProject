@@ -1,24 +1,19 @@
-<div class="filter-panel" [class.collapsed]="!isFilterPanelVisible">
+<div class="filter-panel">
   <div class="filter-header">
     <h3>Filters</h3>
-    <button pButton 
-      icon="pi pi-times"
-      class="p-button-rounded p-button-text p-button-sm"
-      (click)="toggleFilterPanel()">
-    </button>
   </div>
 
   <div class="filter-content">
     <div class="search-section">
       <label for="movieSearch">Movie Title</label>
-        <input 
-          id="movieSearch"
-          type="text" 
-          pInputText 
-          [(ngModel)]="searchQuery" 
-          (ngModelChange)="onSearchQueryChange($event)"
-          placeholder="Search movies..."
-        />
+      <input 
+        id="movieSearch"
+        type="text" 
+        pInputText 
+        [(ngModel)]="searchQuery" 
+        (ngModelChange)="onSearchQueryChange($event)"
+        placeholder="Search movies..."
+      />
     </div>
 
     <div class="sort-section">
@@ -84,14 +79,4 @@
       </button>
     </div>
   </div>
-</div>
-
-<button 
-  *ngIf="!isFilterPanelVisible"
-  pButton 
-  icon="pi pi-filter"
-  class="filter-toggle-button p-button-rounded"
-  (click)="toggleFilterPanel()"
-  pTooltip="Show Filters"
-  tooltipPosition="right">
-</button> 
+</div> 

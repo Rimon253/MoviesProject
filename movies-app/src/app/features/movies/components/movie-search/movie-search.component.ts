@@ -43,7 +43,6 @@ export class MovieSearchComponent {
   selectedGenres: Genre[] = [];
   selectedYear: number | null = null;
   selectedSort: string | null = null;
-  isFilterPanelVisible = true;
   isLoading = false;
 
   sortOptions = [
@@ -147,10 +146,6 @@ export class MovieSearchComponent {
     };
     
     this.filtersChanged.emit(emptyFilters);
-  }
-
-  toggleFilterPanel(): void {
-    this.isFilterPanelVisible = !this.isFilterPanelVisible;
   }
 
   hasActiveFilters(): boolean {

@@ -16,16 +16,20 @@ import { Router } from '@angular/router';
 })
 export class MovieListComponent implements OnInit {
   private movieService = inject(MovieService);
-  private store = inject(MoviesStore);
+  store = inject(MoviesStore);
   private router = inject(Router);
 
   movies = this.store.movies;
   loading = this.store.loading;
   filters = this.store.filters;
-  totalPages = 1;
+  totalPages = this.store.totalPages;
   isLoadingMore = false;
 
   ngOnInit(): void {
+    // Reset loading states when component initializes
+    this.isLoadingMore = false;
+    this.store.setLoading(false);
+    
     if (this.movies().length === 0) {
       this.loadMovies();
     }
@@ -41,7 +45,7 @@ export class MovieListComponent implements OnInit {
     const currentPage = this.store.currentPage();
 
     // Don't trigger more loads if we've reached the total pages
-    if (currentPage > this.totalPages) return;
+    if (currentPage > this.totalPages()) return;
 
     if (windowHeight + scrollTop >= documentHeight - 1000) {
       this.loadMovies();
@@ -61,15 +65,14 @@ export class MovieListComponent implements OnInit {
     this.store.setCurrentPage(1);
     this.store.setFilters(filters);
     this.store.setLoading(true);
-    this.totalPages = 1;
+    this.store.setTotalPages(1);
     
     this.loadMovies();
   }
 
   loadMovies(): void {
-
     const currentPage = this.store.currentPage();
-    if (currentPage > this.totalPages) return;
+    if (currentPage > this.totalPages()) return;
 
     this.isLoadingMore = true;
     this.store.setLoading(true);
@@ -84,7 +87,7 @@ export class MovieListComponent implements OnInit {
       currentFilters.sort_by
     ).subscribe({
       next: (response) => {
-        this.totalPages = response.total_pages;
+        this.store.setTotalPages(response.total_pages);
         
         if (currentPage === 1) {
           this.store.setMovies(response.results);

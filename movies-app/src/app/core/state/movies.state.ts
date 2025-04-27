@@ -8,6 +8,7 @@ export interface MoviesState {
   loading: boolean;
   error: string | null;
   currentPage: number;
+  totalPages: number;
   filters: {
     query?: string;
     selectedGenres: number[];
@@ -23,6 +24,7 @@ const initialState: MoviesState = {
   loading: false,
   error: null,
   currentPage: 1,
+  totalPages: 1,
   filters: {
     selectedGenres: []
   }
@@ -41,6 +43,7 @@ export class MoviesStore {
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
   currentPage = computed(() => this.state().currentPage);
+  totalPages = computed(() => this.state().totalPages);
   filters = computed(() => this.state().filters);
 
   // Actions
@@ -59,6 +62,7 @@ export class MoviesStore {
     }
   }
 
+  // Not used yet
   private addToRecentlyViewed(movie: Movie): void {
     const recentlyViewed = this.state().recentlyViewed;
     const updatedRecent = [
@@ -87,6 +91,10 @@ export class MoviesStore {
         selectedGenres: []
       }
     });
+  }
+
+  setTotalPages(totalPages: number): void {
+    this.updateState({ totalPages });
   }
 
   private updateState(partial: Partial<MoviesState>): void {
