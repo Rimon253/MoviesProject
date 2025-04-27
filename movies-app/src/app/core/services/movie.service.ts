@@ -37,12 +37,18 @@ export class MovieService {
 
   constructor(private http: HttpClient) { }
 
-  getFilteredMovies(page: number = 1, withGenres?: number[], primary_release_year?: number, query?: string): Observable<Movie[]> {
+  getFilteredMovies(
+    page: number = 1, 
+    withGenres?: number[], 
+    primary_release_year?: number, 
+    query?: string,
+    sort_by?: string
+  ): Observable<Movie[]> {
     const params: any = {
       api_key: this.apiKey,
       page: page.toString(),
       language: environment.defaultLanguage,
-      sort_by: 'popularity.desc'
+      sort_by: sort_by || 'popularity.desc'
     };
 
     if (withGenres?.length) {

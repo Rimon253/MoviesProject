@@ -25,7 +25,8 @@ export class MovieListComponent implements OnInit {
   currentFilters: { 
     query?: string; 
     selectedGenres: number[]; 
-    primary_release_year?: number 
+    primary_release_year?: number;
+    sort_by?: string;
   } = {
     selectedGenres: []
   };
@@ -49,7 +50,12 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  onFiltersChanged(filters: { query: string; selectedGenres: number[]; primary_release_year?: number }): void {
+  onFiltersChanged(filters: { 
+    query: string; 
+    selectedGenres: number[]; 
+    primary_release_year?: number;
+    sort_by?: string;
+  }): void {
     this.store.setMovies([]);
     this.store.setCurrentPage(1);
     this.currentFilters = filters;
@@ -68,7 +74,8 @@ export class MovieListComponent implements OnInit {
       currentPage,
       this.currentFilters.selectedGenres,
       this.currentFilters.primary_release_year,
-      this.currentFilters.query
+      this.currentFilters.query,
+      this.currentFilters.sort_by
     ).subscribe({
       next: (movies) => {
         if (currentPage === 1) {

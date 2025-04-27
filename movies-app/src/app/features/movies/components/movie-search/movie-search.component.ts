@@ -14,6 +14,7 @@ export interface MovieFilters {
   query: string;
   selectedGenres: number[];
   primary_release_year?: number;
+  sort_by?: string;
 }
 
 @Component({
@@ -41,8 +42,20 @@ export class MovieSearchComponent {
   genres: Genre[] = [];
   selectedGenres: Genre[] = [];
   selectedYear: number | null = null;
+  selectedSort: string | null = null;
   isFilterPanelVisible = true;
   isLoading = false;
+
+  sortOptions = [
+    { label: 'Popularity Descending', value: 'popularity.desc' },
+    { label: 'Popularity Ascending', value: 'popularity.asc' },
+    { label: 'Rating Descending', value: 'vote_average.desc' },
+    { label: 'Rating Ascending', value: 'vote_average.asc' },
+    { label: 'Release Date Descending', value: 'primary_release_date.desc' },
+    { label: 'Release Date Ascending', value: 'primary_release_date.asc' },
+    { label: 'Title (A-Z)', value: 'original_title.asc' },
+    { label: 'Title (Z-A)', value: 'original_title.desc' }
+  ];
 
   years = Array.from(
     { length: new Date().getFullYear() - 1900 + 1 },
@@ -82,6 +95,10 @@ export class MovieSearchComponent {
       filters.primary_release_year = this.selectedYear;
     }
 
+    if (this.selectedSort) {
+      filters.sort_by = this.selectedSort;
+    }
+
     this.filtersChanged.emit(filters);
     this.isLoading = false;
   }
@@ -90,6 +107,7 @@ export class MovieSearchComponent {
     this.searchQuery = '';
     this.selectedGenres = [];
     this.selectedYear = null;
+    this.selectedSort = null;
     this.applyFilters();
   }
 
@@ -98,6 +116,6 @@ export class MovieSearchComponent {
   }
 
   hasActiveFilters(): boolean {
-    return !!(this.searchQuery || this.selectedGenres.length > 0 || this.selectedYear);
+    return !!(this.searchQuery || this.selectedGenres.length > 0 || this.selectedYear || this.selectedSort);
   }
 } 
