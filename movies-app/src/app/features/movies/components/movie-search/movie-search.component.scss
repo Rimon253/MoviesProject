@@ -295,6 +295,37 @@
   }
 }
 
+.filter-disabled-message {
+  display: block;
+  color: var(--text-color-secondary);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.sort-section,
+.genres-section,
+.year-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.875rem;
+  }
+
+  ::ng-deep {
+    .p-dropdown,
+    .p-multiselect {
+      &.p-disabled {
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .filter-panel {
     width: 280px;

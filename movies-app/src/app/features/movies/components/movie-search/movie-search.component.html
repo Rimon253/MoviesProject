@@ -18,6 +18,7 @@
           type="text" 
           pInputText 
           [(ngModel)]="searchQuery" 
+          (ngModelChange)="onSearchQueryChange($event)"
           placeholder="Search movies..."
         />
       </span>
@@ -32,8 +33,12 @@
         placeholder="Select sorting"
         optionLabel="label"
         optionValue="value"
-        [style]="{ width: '100%' }">
+        [style]="{ width: '100%' }"
+        [disabled]="!!searchQuery">
       </p-dropdown>
+      @if (searchQuery) {
+        <small class="filter-disabled-message">Sorting is disabled during title search</small>
+      }
     </div>
 
     <div class="genres-section">
@@ -46,8 +51,12 @@
         placeholder="Select genres"
         [showToggleAll]="true"
         [showHeader]="false"
-        (onChange)="onGenreChange($event)">
+        (onChange)="onGenreChange($event)"
+        [disabled]="!!searchQuery">
       </p-multiSelect>
+      @if (searchQuery) {
+        <small class="filter-disabled-message">Genre filter is disabled during title search</small>
+      }
     </div>
 
     <div class="year-section">

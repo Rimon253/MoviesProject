@@ -11,7 +11,7 @@ export class MovieService {
   private readonly baseUrl = environment.tmdbBaseUrl;
   private readonly apiKey = environment.tmdbApiKey;
   private readonly discoverUrl = `${this.baseUrl}/discover/movie`;
-  private readonly popularUrl = `${this.baseUrl}/movie/popular`;
+  private readonly searchUrl = `${this.baseUrl}/search/movie`;
   private readonly languageMap: { [key: string]: string } = {
     'en': 'English',
     'es': 'Spanish',
@@ -61,7 +61,7 @@ export class MovieService {
 
     // If there's a search query, use search endpoint, otherwise use discover endpoint
     const endpoint = query 
-      ? `${this.baseUrl}/search/movie`
+      ? this.searchUrl
       : this.discoverUrl;
 
     if (query) {
@@ -70,18 +70,6 @@ export class MovieService {
 
     return this.http
       .get<{ results: MovieDto[] }>(endpoint, { params })
-      .pipe(map(res => res.results.map(this.mapMovieDto)));
-  }
-
-  getPopularMovies(page: number = 1): Observable<Movie[]> {
-    return this.http
-      .get<{ results: MovieDto[] }>(this.popularUrl, {
-        params: {
-          api_key: this.apiKey,
-          page: page.toString(),
-          language: environment.defaultLanguage
-        }
-      })
       .pipe(map(res => res.results.map(this.mapMovieDto)));
   }
 

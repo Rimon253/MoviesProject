@@ -21,15 +21,8 @@ export class MovieListComponent implements OnInit {
 
   movies = this.store.movies;
   loading = this.store.loading;
+  filters = this.store.filters;
   isLoadingMore = false;
-  currentFilters: { 
-    query?: string; 
-    selectedGenres: number[]; 
-    primary_release_year?: number;
-    sort_by?: string;
-  } = {
-    selectedGenres: []
-  };
 
   ngOnInit(): void {
     if (this.movies().length === 0) {
@@ -58,7 +51,7 @@ export class MovieListComponent implements OnInit {
   }): void {
     this.store.setMovies([]);
     this.store.setCurrentPage(1);
-    this.currentFilters = filters;
+    this.store.setFilters(filters);
     this.store.setLoading(true);
     
     this.loadMovies();
@@ -69,13 +62,14 @@ export class MovieListComponent implements OnInit {
     this.store.setLoading(true);
     
     const currentPage = this.store.currentPage();
+    const currentFilters = this.filters();
     
     this.movieService.getFilteredMovies(
       currentPage,
-      this.currentFilters.selectedGenres,
-      this.currentFilters.primary_release_year,
-      this.currentFilters.query,
-      this.currentFilters.sort_by
+      currentFilters.selectedGenres,
+      currentFilters.primary_release_year,
+      currentFilters.query,
+      currentFilters.sort_by
     ).subscribe({
       next: (movies) => {
         if (currentPage === 1) {

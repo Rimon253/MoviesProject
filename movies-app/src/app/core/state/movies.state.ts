@@ -10,6 +10,12 @@ export interface MoviesState {
   loading: boolean;
   error: string | null;
   currentPage: number;
+  filters: {
+    query?: string;
+    selectedGenres: number[];
+    primary_release_year?: number;
+    sort_by?: string;
+  };
 }
 
 const initialState: MoviesState = {
@@ -20,7 +26,10 @@ const initialState: MoviesState = {
   selectedMovie: null,
   loading: false,
   error: null,
-  currentPage: 1
+  currentPage: 1,
+  filters: {
+    selectedGenres: []
+  }
 };
 
 @Injectable({
@@ -38,6 +47,7 @@ export class MoviesStore {
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
   currentPage = computed(() => this.state().currentPage);
+  filters = computed(() => this.state().filters);
 
   // Actions
   setMovies(movies: Movie[]): void {
@@ -103,6 +113,18 @@ export class MoviesStore {
     this.updateState({ error });
   }
 
+  setFilters(filters: MoviesState['filters']): void {
+    this.updateState({ filters });
+  }
+
+  clearFilters(): void {
+    this.updateState({
+      filters: {
+        selectedGenres: []
+      }
+    });
+  }
+
   private updateState(partial: Partial<MoviesState>): void {
     this.state.update(state => {
       const newState = { ...state, ...partial };
@@ -120,7 +142,8 @@ export class MoviesStore {
           ...initialState,
           favorites: parsed.favorites || [],
           wishlist: parsed.wishlist || [],
-          recentlyViewed: parsed.recentlyViewed || []
+          recentlyViewed: parsed.recentlyViewed || [],
+          filters: parsed.filters || { selectedGenres: [] }
         };
       }
     } catch (e) {
@@ -134,7 +157,8 @@ export class MoviesStore {
       const toSave = {
         favorites: state.favorites,
         wishlist: state.wishlist,
-        recentlyViewed: state.recentlyViewed
+        recentlyViewed: state.recentlyViewed,
+        filters: state.filters
       };
       localStorage.setItem('moviesState', JSON.stringify(toSave));
     } catch (e) {

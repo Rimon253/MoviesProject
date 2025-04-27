@@ -64,6 +64,32 @@ export class MovieSearchComponent {
 
   constructor() {
     this.loadGenres();
+    this.initializeFromStore();
+  }
+
+  private initializeFromStore(): void {
+    const storedFilters = this.store.filters();
+    this.searchQuery = storedFilters.query || '';
+    this.selectedSort = storedFilters.sort_by || null;
+    this.selectedYear = storedFilters.primary_release_year || null;
+    
+    // We need to wait for genres to load before setting selected genres
+    if (storedFilters.selectedGenres?.length && !storedFilters.query) {
+      this.movieService.getGenres().subscribe(genres => {
+        this.selectedGenres = genres.filter(genre => 
+          storedFilters.selectedGenres.includes(genre.id)
+        );
+      });
+    }
+  }
+
+  onSearchQueryChange(query: string): void {
+    if (query) {
+      // Clear and disable sort and genres when searching
+      this.selectedSort = null;
+      this.selectedGenres = [];
+    }
+    // Don't auto-apply filters here, let user click Apply button
   }
 
   private loadGenres(): void {
@@ -88,14 +114,14 @@ export class MovieSearchComponent {
 
     const filters: MovieFilters = {
       query: this.searchQuery,
-      selectedGenres: this.selectedGenres.map(genre => genre.id)
+      selectedGenres: this.searchQuery ? [] : this.selectedGenres.map(genre => genre.id)
     };
 
     if (this.selectedYear) {
       filters.primary_release_year = this.selectedYear;
     }
 
-    if (this.selectedSort) {
+    if (this.selectedSort && !this.searchQuery) {
       filters.sort_by = this.selectedSort;
     }
 
@@ -108,6 +134,7 @@ export class MovieSearchComponent {
     this.selectedGenres = [];
     this.selectedYear = null;
     this.selectedSort = null;
+    this.store.clearFilters();
     this.applyFilters();
   }
 
