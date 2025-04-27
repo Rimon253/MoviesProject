@@ -17,16 +17,6 @@ export class AppComponent {
       label: 'Home',
       icon: 'pi pi-home',
       routerLink: '/'
-    },
-    {
-      label: 'Favorites',
-      icon: 'pi pi-heart',
-      routerLink: '/favorites'
-    },
-    {
-      label: 'Wishlist',
-      icon: 'pi pi-bookmark',
-      routerLink: '/wishlist'
     }
   ];
 }

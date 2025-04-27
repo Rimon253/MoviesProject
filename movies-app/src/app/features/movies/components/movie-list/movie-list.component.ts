@@ -104,22 +104,6 @@ export class MovieListComponent implements OnInit {
     });
   }
 
-  isFavorite(movie: Movie): boolean {
-    return this.store.favorites().some(m => m.id === movie.id);
-  }
-
-  isWishlist(movie: Movie): boolean {
-    return this.store.wishlist().some(m => m.id === movie.id);
-  }
-
-  onToggleFavorite(movie: Movie): void {
-    this.store.toggleFavorite(movie);
-  }
-
-  onToggleWishlist(movie: Movie): void {
-    this.store.toggleWishlist(movie);
-  }
-
   onShowDetails(movie: Movie): void {
     this.router.navigate(['/movie', movie.id]);
   }

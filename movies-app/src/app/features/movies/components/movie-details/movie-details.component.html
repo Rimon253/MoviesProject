@@ -22,20 +22,6 @@
       <div class="info">
         <div class="header">
           <h1>{{ movie.title }}</h1>
-          <div class="actions">
-            <button pButton 
-              [icon]="isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
-              class="p-button-rounded"
-              [class.p-button-danger]="isFavorite"
-              (click)="toggleFavorite()">
-            </button>
-            <button pButton 
-              [icon]="isWishlist ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"
-              class="p-button-rounded"
-              [class.p-button-info]="isWishlist"
-              (click)="toggleWishlist()">
-            </button>
-          </div>
         </div>
         <div class="meta">
           <div class="meta-row">
@@ -53,7 +39,6 @@
               <p-chip 
                 [label]="genre.name"
                 [removable]="false"
-                (click)="onGenreClick(genre)"
                 styleClass="genre-chip">
               </p-chip>
             }

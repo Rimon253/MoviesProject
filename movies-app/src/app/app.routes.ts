@@ -8,16 +8,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/movies/components/movie-list/movie-list.component').then(m => m.MovieListComponent)
   },
   {
-    path: 'favorites',
-    component: MovieListComponent
-    // TODO: Add filter for favorites
-  },
-  {
-    path: 'wishlist',
-    component: MovieListComponent
-    // TODO: Add filter for wishlist
-  },
-  {
     path: 'movie/:id',
     component: MovieDetailsComponent
   }

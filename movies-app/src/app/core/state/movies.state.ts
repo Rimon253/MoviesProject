@@ -3,8 +3,6 @@ import { Movie, MovieDetails } from '../../shared/models/movie.interface';
 
 export interface MoviesState {
   movies: Movie[];
-  favorites: Movie[];
-  wishlist: Movie[];
   recentlyViewed: Movie[];
   selectedMovie: MovieDetails | null;
   loading: boolean;
@@ -20,8 +18,6 @@ export interface MoviesState {
 
 const initialState: MoviesState = {
   movies: [],
-  favorites: [],
-  wishlist: [],
   recentlyViewed: [],
   selectedMovie: null,
   loading: false,
@@ -40,8 +36,6 @@ export class MoviesStore {
 
   // Selectors
   movies = computed(() => this.state().movies);
-  favorites = computed(() => this.state().favorites);
-  wishlist = computed(() => this.state().wishlist);
   recentlyViewed = computed(() => this.state().recentlyViewed);
   selectedMovie = computed(() => this.state().selectedMovie);
   loading = computed(() => this.state().loading);
@@ -62,36 +56,6 @@ export class MoviesStore {
     this.updateState({ selectedMovie: movie });
     if (movie) {
       this.addToRecentlyViewed(movie);
-    }
-  }
-
-  toggleFavorite(movie: Movie): void {
-    const favorites = this.state().favorites;
-    const isFavorite = favorites.some(m => m.id === movie.id);
-    
-    if (isFavorite) {
-      this.updateState({
-        favorites: favorites.filter(m => m.id !== movie.id)
-      });
-    } else {
-      this.updateState({
-        favorites: [...favorites, movie]
-      });
-    }
-  }
-
-  toggleWishlist(movie: Movie): void {
-    const wishlist = this.state().wishlist;
-    const isInWishlist = wishlist.some(m => m.id === movie.id);
-    
-    if (isInWishlist) {
-      this.updateState({
-        wishlist: wishlist.filter(m => m.id !== movie.id)
-      });
-    } else {
-      this.updateState({
-        wishlist: [...wishlist, movie]
-      });
     }
   }
 
@@ -140,8 +104,6 @@ export class MoviesStore {
         const parsed = JSON.parse(saved);
         return {
           ...initialState,
-          favorites: parsed.favorites || [],
-          wishlist: parsed.wishlist || [],
           recentlyViewed: parsed.recentlyViewed || [],
           filters: parsed.filters || { selectedGenres: [] }
         };
@@ -155,8 +117,6 @@ export class MoviesStore {
   private saveToLocalStorage(state: MoviesState): void {
     try {
       const toSave = {
-        favorites: state.favorites,
-        wishlist: state.wishlist,
         recentlyViewed: state.recentlyViewed,
         filters: state.filters
       };

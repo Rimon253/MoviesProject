@@ -32,8 +32,6 @@ export class MovieDetailsComponent implements OnInit {
   private location = inject(Location);
 
   movie: MovieDetails | null = null;
-  isFavorite = false;
-  isWishlist = false;
 
   get movieDetails(): Array<{ label: string; value: string | null }> {
     if (!this.movie) return [];
@@ -109,8 +107,6 @@ export class MovieDetailsComponent implements OnInit {
               director: movie.credits.director
             }
           };
-          this.checkFavoriteStatus();
-          this.checkWishlistStatus();
         } else {
           this.store.setError('Failed to load movie details');
         }
@@ -119,43 +115,7 @@ export class MovieDetailsComponent implements OnInit {
     });
   }
 
-  private checkFavoriteStatus(): void {
-    if (this.movie) {
-      this.isFavorite = this.store.favorites().some(m => m.id === this.movie?.id);
-    }
-  }
-
-  private checkWishlistStatus(): void {
-    if (this.movie) {
-      this.isWishlist = this.store.wishlist().some(m => m.id === this.movie?.id);
-    }
-  }
-
-  toggleFavorite(): void {
-    if (this.movie) {
-      this.store.toggleFavorite(this.movie);
-      this.isFavorite = !this.isFavorite;
-    }
-  }
-
-  toggleWishlist(): void {
-    if (this.movie) {
-      this.store.toggleWishlist(this.movie);
-      this.isWishlist = !this.isWishlist;
-    }
-  }
-
   goBack(): void {
     this.location.back();
-  }
-
-  onGenreClick(genre: Genre): void {
-    // Navigate to movie list with genre filter
-    this.router.navigate(['/movies'], { 
-      queryParams: { 
-        genre: genre.id,
-        genreName: genre.name
-      }
-    });
   }
 } 
