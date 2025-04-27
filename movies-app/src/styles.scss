@@ -3,9 +3,8 @@
 
 /* Global Styles */
 :root {
-  --primary-color: #9c27b0;
-  --primary-dark: #7b1fa2;
-  --primary-light: #ba68c8;
+  --primary-color: #34d399;
+  --primary-dark: #34d399;
   --text-color: #ffffff;
   --text-color-secondary: #bdbdbd;
   --surface-ground: #121212;
@@ -81,7 +80,12 @@ body {
   border-radius: 4px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 800;
   letter-spacing: 0px;
