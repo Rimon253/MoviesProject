@@ -7,7 +7,6 @@ A modern Angular application for browsing and discovering movies using The Movie
 - Search movies by title
 - Filter movies by genre and year
 - View detailed movie information
-- Track recently viewed movies
 - Responsive design using PrimeNG components
 
 ## Prerequisites
