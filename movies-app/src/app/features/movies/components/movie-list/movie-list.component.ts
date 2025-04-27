@@ -22,6 +22,7 @@ export class MovieListComponent implements OnInit {
   movies = this.store.movies;
   loading = this.store.loading;
   filters = this.store.filters;
+  totalPages = 1;
   isLoadingMore = false;
 
   ngOnInit(): void {
@@ -37,8 +38,12 @@ export class MovieListComponent implements OnInit {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const currentPage = this.store.currentPage();
 
-    if (windowHeight + scrollTop >= documentHeight - 200) {
+    // Don't trigger more loads if we've reached the total pages
+    if (currentPage > this.totalPages) return;
+
+    if (windowHeight + scrollTop >= documentHeight - 1000) {
       this.loadMovies();
     }
   }
@@ -49,19 +54,26 @@ export class MovieListComponent implements OnInit {
     primary_release_year?: number;
     sort_by?: string;
   }): void {
+    // Scroll to top first
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     this.store.setMovies([]);
     this.store.setCurrentPage(1);
     this.store.setFilters(filters);
     this.store.setLoading(true);
+    this.totalPages = 1;
     
     this.loadMovies();
   }
 
   loadMovies(): void {
+
+    const currentPage = this.store.currentPage();
+    if (currentPage > this.totalPages) return;
+
     this.isLoadingMore = true;
     this.store.setLoading(true);
     
-    const currentPage = this.store.currentPage();
     const currentFilters = this.filters();
     
     this.movieService.getFilteredMovies(
@@ -71,11 +83,13 @@ export class MovieListComponent implements OnInit {
       currentFilters.query,
       currentFilters.sort_by
     ).subscribe({
-      next: (movies) => {
+      next: (response) => {
+        this.totalPages = response.total_pages;
+        
         if (currentPage === 1) {
-          this.store.setMovies(movies);
+          this.store.setMovies(response.results);
         } else {
-          this.store.setMovies([...this.movies(), ...movies]);
+          this.store.setMovies([...this.movies(), ...response.results]);
         }
         this.store.setLoading(false);
         this.store.setCurrentPage(currentPage + 1);

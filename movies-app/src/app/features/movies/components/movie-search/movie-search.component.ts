@@ -8,7 +8,7 @@ import { MoviesStore } from '../../../../core/state/movies.state';
 import { Movie, Genre } from '../../../../shared/models/movie.interface';
 import { Router } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 export interface MovieFilters {
   query: string;
@@ -26,7 +26,7 @@ export interface MovieFilters {
     InputTextModule,
     ButtonModule,
     MultiSelectModule,
-    DropdownModule
+    SelectModule
   ],
   templateUrl: './movie-search.component.html',
   styleUrls: ['./movie-search.component.scss']
@@ -109,6 +109,9 @@ export class MovieSearchComponent {
   }
 
   applyFilters(): void {
+    // Scroll to top first
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     this.isLoading = true;
     this.store.setLoading(true);
 
@@ -135,7 +138,15 @@ export class MovieSearchComponent {
     this.selectedYear = null;
     this.selectedSort = null;
     this.store.clearFilters();
-    this.applyFilters();
+    
+    const emptyFilters: MovieFilters = {
+      query: '',
+      selectedGenres: [],
+      primary_release_year: undefined,
+      sort_by: undefined
+    };
+    
+    this.filtersChanged.emit(emptyFilters);
   }
 
   toggleFilterPanel(): void {

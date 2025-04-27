@@ -11,8 +11,6 @@
   <div class="filter-content">
     <div class="search-section">
       <label for="movieSearch">Movie Title</label>
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
         <input 
           id="movieSearch"
           type="text" 
@@ -21,12 +19,11 @@
           (ngModelChange)="onSearchQueryChange($event)"
           placeholder="Search movies..."
         />
-      </span>
     </div>
 
     <div class="sort-section">
       <label>Sort By</label>
-      <p-dropdown
+      <p-select
         [options]="sortOptions"
         [(ngModel)]="selectedSort"
         [showClear]="true"
@@ -35,7 +32,7 @@
         optionValue="value"
         [style]="{ width: '100%' }"
         [disabled]="!!searchQuery">
-      </p-dropdown>
+      </p-select>
       @if (searchQuery) {
         <small class="filter-disabled-message">Sorting is disabled during title search</small>
       }
@@ -61,7 +58,7 @@
 
     <div class="year-section">
       <label>Release Year</label>
-      <p-dropdown
+      <p-select
         [options]="years"
         [(ngModel)]="selectedYear"
         [showClear]="true"
@@ -69,15 +66,14 @@
         optionLabel="label"
         optionValue="value"
         [style]="{ width: '100%' }">
-      </p-dropdown>
+      </p-select>
     </div>
 
     <div class="filter-actions">
       <button pButton 
         label="Apply Filters"
         icon="pi pi-filter"
-        (click)="applyFilters()"
-        [disabled]="!hasActiveFilters()">
+        (click)="applyFilters()">
       </button>
       <button pButton 
         label="Clear"

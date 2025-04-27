@@ -227,21 +227,6 @@
   }
 }
 
-.search-section {
-  .p-input-icon-left {
-    width: 100%;
-
-    i {
-      color: var(--text-color-secondary);
-    }
-
-    input {
-      width: 100%;
-      padding-left: 2.5rem;
-    }
-  }
-}
-
 .genres-section {
   ::ng-deep {
     .p-multiselect {
@@ -317,10 +302,35 @@
   }
 
   ::ng-deep {
-    .p-dropdown,
+    .p-select,
     .p-multiselect {
       &.p-disabled {
         opacity: 0.6;
+      }
+
+      .p-select-label {
+        padding: 0.75rem;
+      }
+
+      .p-select-items {
+        background: var(--surface-overlay);
+        border: none;
+        border-radius: 8px;
+        margin-top: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .p-select-item {
+        padding: 0.75rem 1rem;
+        
+        &:hover {
+          background: var(--surface-hover);
+        }
+
+        &.p-highlight {
+          background: var(--primary-color-alpha-10);
+          color: var(--primary-color);
+        }
       }
     }
   }

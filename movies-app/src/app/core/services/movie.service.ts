@@ -43,7 +43,7 @@ export class MovieService {
     primary_release_year?: number, 
     query?: string,
     sort_by?: string
-  ): Observable<Movie[]> {
+  ): Observable<{ results: Movie[], total_pages: number }> {
     const params: any = {
       api_key: this.apiKey,
       page: page.toString(),
@@ -69,8 +69,13 @@ export class MovieService {
     }
 
     return this.http
-      .get<{ results: MovieDto[] }>(endpoint, { params })
-      .pipe(map(res => res.results.map(this.mapMovieDto)));
+      .get<{ results: MovieDto[], total_pages: number }>(endpoint, { params })
+      .pipe(
+        map(res => ({
+          results: res.results.map(this.mapMovieDto),
+          total_pages: res.total_pages
+        }))
+      );
   }
 
   getMovieDetails(id: number): Observable<MovieDetails> {
